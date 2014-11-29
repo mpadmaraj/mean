@@ -1,0 +1,22 @@
+{
+  "name": "mean",
+  "description": "Health Kiosk",
+  "version": "0.0.1",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "~1.2.1",
+    "mongoose":"*",
+    "express":"*",
+    "cors":"*",
+    "bower":"*"
+  },
+  "scripts":{
+    "postinstall":"sudo sh ./postinstall.sh"
+  },
+  "config": {
+  "unsafe-perm":true
+  },
+  "engines": {
+    "node": "v0.10.x"
+  }
+}
