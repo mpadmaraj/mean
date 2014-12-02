@@ -1,5 +1,6 @@
 #define BUILDING_NODE_EXTENSION
 #include <node.h>
+#include "../include/eHealth.h"
 
 using namespace v8;
 
@@ -22,6 +23,8 @@ Handle<Value> Add(const Arguments& args) {
 }
 
 void Init(Handle<Object> exports) {
+eHealth.readBloodPressureSensor();
+  delay(100);
   exports->Set(String::NewSymbol("add"),
       FunctionTemplate::New(Add)->GetFunction());
 }

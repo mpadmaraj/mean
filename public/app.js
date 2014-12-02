@@ -4,7 +4,7 @@ mean.controller("MeanCtrl",function($http){
     //var app=this;
     $http({
         method: 'GET',
-        url: 'http://localhost:3000',
+        url: 'http://192.168.0.103:3000',
         params: {first_num: 3,second_num:4}
     }).success(function(data){
         // With the data succesfully returned, call our callback
