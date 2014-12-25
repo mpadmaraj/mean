@@ -2,7 +2,7 @@ var mean = angular.module("mean",[]);
 
 mean.controller("MeanCtrl",function($http){
     //var app=this;
-    $http({
+ /*   $http({
         method: 'GET',
         url: 'http://192.168.0.103:3000',
         params: {first_num: 3,second_num:4}
@@ -11,7 +11,7 @@ mean.controller("MeanCtrl",function($http){
         console.log(data)
     }).error(function(){
         alert("error");
-    });
+    });*/
      //$http.get("http://localhost:3000").success(function(msgs){
      //    scope.msgs= msgs;
      //})

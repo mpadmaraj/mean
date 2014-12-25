@@ -1,6 +1,6 @@
 var express = require("express");
 var app = express();
-//var addon = require('bindings')('addon');
+var addon = require('bindings')('addon');
 //var addon = require('./build/Release/addon');
 var mongoose= require("mongoose");
 var cors = require("cors");
@@ -16,10 +16,16 @@ var client = mqtt.createClient(mqtt_url.port, mqtt_url.hostname, {
 client.on('connect', function() { // When connected
 
     // subscribe to a topic
-    client.subscribe('hk/client', function() {
+    client.subscribe('hk/machines/rasp1', function() {
         // when a message arrives, do something with it
         client.on('message', function(topic, message, packet) {
             console.log("Received '" + message + "' on '" + topic + "'");
+            var measuredData =JSON.parse(addon.measure());
+            measuredData.username="demouser";
+            measuredData.machine="rasp1";
+            client.publish('hk/machines/results', JSON.stringify(measuredData) , function() {
+                console.log("Message is published1");
+            });
         });
     });
     client.publish('hk/machines', 'rasp1', function() {
@@ -29,7 +35,7 @@ client.on('connect', function() { // When connected
     var id = setInterval(function(){
         client.publish('hk/machines', 'rasp1', function() {
             console.log("Message is published");
-          //  client.end(); // Close the connection when published
+            //  client.end(); // Close the connection when published
         });
     }, 60000);
     // publish a message to a topic
@@ -44,10 +50,10 @@ app.get("/",function(req,res){
     //Product.find(function(err,products){
     //    res.send(products);
     //})
-  //  var first_num = req.param("first_num");
-  //  var second_num = req.param("second_num");
-  //  var s = addon.add(3, 5);
-  //  res.json({value:s });
+    //  var first_num = req.param("first_num");
+    //  var second_num = req.param("second_num");
+    //  var s = addon.add(3, 5);
+    //  res.json({value:s });
 
 });
 app.listen(3001);

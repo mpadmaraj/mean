@@ -8,7 +8,9 @@
     "mongoose":"*",
     "express":"*",
     "cors":"*",
-    "bower":"*"
+    "bower":"*",
+    "mqtt":"*",
+    "socket.io":"latest"
   },
   "scripts":{
     "postinstall":"sudo sh ./postinstall.sh"

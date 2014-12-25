@@ -1,32 +1,57 @@
 #define BUILDING_NODE_EXTENSION
 #include <node.h>
 #include "../include/eHealth.h"
+#include <sstream>
+#include <string>
+
+using std::string;
 
 using namespace v8;
+int cont = 0;
 
-Handle<Value> Add(const Arguments& args) {
+string IntToString (int a)
+{
+    std::ostringstream temp;
+    temp<<a;
+    return temp.str();
+}
+
+Handle<Value> Measure(const Arguments& args) {
   HandleScope scope;
+ // printf("PRbpm : %d",eHealth.getBPM());
 
-  if (args.Length() < 2) {
-    ThrowException(Exception::TypeError(String::New("Wrong number of arguments")));
-    return scope.Close(Undefined());
-  }
+    string str;
+    str.append("{\"pulse\":");
+    str.append(IntToString(eHealth.getBPM()).c_str());
+    str.append(",\"spo2\":");
+    str.append(IntToString(eHealth.getOxygenSaturation()).c_str());
+    
+    str.append("}");
+    printf(str.c_str());
 
-  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
-    ThrowException(Exception::TypeError(String::New("Wrong arguments")));
-    return scope.Close(Undefined());
-  }
+    //printf("    %%SPo2 : %d\n", eHealth.getOxygenSaturation());
+    
+    return scope.Close(String::New(str.c_str()));
+}
 
-  Local<Number> num = Number::New(args[0]->NumberValue() +
-      args[1]->NumberValue());
-  return scope.Close(num);
+void readPulsioximeter(){
+    
+    cont ++;
+    if (cont == 500) { //Get only of one 50 measures to reduce the latency
+        eHealth.readPulsioximeter();
+        cont = 0;
+    }
 }
 
 void Init(Handle<Object> exports) {
-eHealth.readBloodPressureSensor();
-  delay(100);
-  exports->Set(String::NewSymbol("add"),
-      FunctionTemplate::New(Add)->GetFunction());
+  //eHealth.readBloodPressureSensor();
+  //delay(100);
+    
+    eHealth.initPulsioximeter();
+    //Attach the inttruptions for using the pulsioximeter.
+    attachInterrupt(6, readPulsioximeter, RISING);
+    
+    exports->Set(String::NewSymbol("measure"), FunctionTemplate::New(Measure)->GetFunction());
 }
 
 NODE_MODULE(addon, Init)
