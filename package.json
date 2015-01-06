@@ -12,7 +12,7 @@
     "i2c":"*"
   },
   "scripts":{
-    "start":"sudo server/server.js"
+    "start":"sudo sh ./postinstall.sh"
   },
   "config": {
   "unsafe-perm":true
