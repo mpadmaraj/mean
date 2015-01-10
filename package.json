@@ -1,21 +1,22 @@
 {
-  "name": "rasp",
+  "name": "mean",
   "description": "Health Kiosk",
   "version": "0.0.1",
+  "gypfile": true,
   "dependencies": {
+    "bindings": "*",
     "mongoose":"*",
     "express":"*",
     "cors":"*",
     "bower":"*",
     "mqtt":"*",
-    "socket.io":"latest",
-    "i2c":"*"
+    "socket.io":"latest"
   },
   "scripts":{
-    "start":"sudo sh ./postinstall.sh"
+    "postinstall":"sudo sh ./postinstall.sh"
   },
   "config": {
-  "unsafe-perm":true
+    "unsafe-perm":true
   },
   "engines": {
     "node": "v0.10.x"

@@ -3,11 +3,15 @@
 #include "../include/eHealth.h"
 #include <sstream>
 #include <string>
+#include <unistd.h>
 
 using std::string;
 
 using namespace v8;
 int cont = 0;
+int bpReadings=0;
+int spo2Readings=0;
+unsigned int microseconds=30;
 
 string IntToString (int a)
 {
@@ -20,11 +24,18 @@ Handle<Value> Measure(const Arguments& args) {
   HandleScope scope;
  // printf("PRbpm : %d",eHealth.getBPM());
 
+     for (int i = 0; i < 10; ++i){
+        bpReadings=bpReadings+eHealth.getBPM();
+        spo2Readings=spo2Readings+eHealth.getOxygenSaturation();
+        unistd::usleep(microseconds);
+     }
+     bpReadings=bpReadings/10;
+     spo2Readings=spo2Readings/10;
     string str;
     str.append("{\"pulse\":");
-    str.append(IntToString(eHealth.getBPM()).c_str());
+    str.append(IntToString(bpReadings).c_str());
     str.append(",\"spo2\":");
-    str.append(IntToString(eHealth.getOxygenSaturation()).c_str());
+    str.append(IntToString(spo2Readings).c_str());
     
     str.append("}");
     printf(str.c_str());
@@ -51,7 +62,7 @@ void Init(Handle<Object> exports) {
     //Attach the inttruptions for using the pulsioximeter.
     attachInterrupt(6, readPulsioximeter, RISING);
     
-    exports->Set(String::NewSymbol("measure"), FunctionTemplate::New(Measure)->GetFunction());
+    exports->Set(String::NewSymbol("getReadings"), FunctionTemplate::New(Measure)->GetFunction());
 }
 
 NODE_MODULE(addon, Init)
