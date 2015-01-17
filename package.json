@@ -10,7 +10,8 @@
     "cors":"*",
     "bower":"*",
     "mqtt":"*",
-    "socket.io":"latest"
+    "socket.io":"latest",
+    "python-shell":"*"
   },
   "scripts":{
     "postinstall":"sudo sh ./postinstall.sh"
